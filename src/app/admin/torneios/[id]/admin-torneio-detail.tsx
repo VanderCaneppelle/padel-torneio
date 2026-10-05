@@ -189,7 +189,7 @@ export function AdminTorneioDetail({
                   type="datetime-local"
                   value={opensAt}
                   onChange={(e) => setOpensAt(e.target.value)}
-                  className="input !py-1.5 text-sm"
+                  className="input !py-1.5"
                 />
                 <button onClick={scheduleOpen} disabled={loading || !opensAt} className="btn btn-outline">
                   Agendar abertura
@@ -216,7 +216,7 @@ export function AdminTorneioDetail({
                   type="datetime-local"
                   value={scheduledAt}
                   onChange={(e) => setScheduledAt(e.target.value)}
-                  className="input !py-1.5 text-sm"
+                  className="input !py-1.5"
                 />
                 <button
                   onClick={scheduleClose}
@@ -340,12 +340,12 @@ function RegList({
                 <input
                   value={editP1}
                   onChange={(e) => setEditP1(e.target.value)}
-                  className="input !py-1.5 text-sm"
+                  className="input !py-1.5"
                 />
                 <input
                   value={editP2}
                   onChange={(e) => setEditP2(e.target.value)}
-                  className="input !py-1.5 text-sm"
+                  className="input !py-1.5"
                 />
                 <div className="flex gap-2">
                   <button

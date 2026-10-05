@@ -88,7 +88,8 @@ body {
     border-radius: 0.5rem;
     padding: 0.65rem 0.9rem;
     color: var(--color-fg);
-    font-size: 0.9rem;
+    /* 16px minimum: abaixo disso o iOS Safari da zoom automatico ao focar o campo */
+    font-size: 1rem;
     outline: none;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }

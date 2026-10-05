@@ -158,7 +158,7 @@ export default function NovoTorneioPage() {
                     min={1}
                     value={limits[cat]}
                     onChange={(e) => setLimits((prev) => ({ ...prev, [cat]: e.target.value }))}
-                    className="input !ml-auto !w-20 !py-1.5 text-sm"
+                    className="input !ml-auto !w-20 !py-1.5"
                   />
                 )}
               </label>
