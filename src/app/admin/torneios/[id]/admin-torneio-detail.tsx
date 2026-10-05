@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { DiagonalLines } from "@/components/diagonal-lines";
@@ -168,7 +169,12 @@ export function AdminTorneioDetail({
         <div className="relative z-10 mx-auto max-w-3xl px-6 py-12">
           <div className="flex items-center justify-between">
             <BackLink href="/admin" label="Torneios" />
-            <ShareButton title={tournament.name} path={`/torneios/${tournament.id}`} />
+            <div className="flex items-center gap-2">
+              <Link href={`/admin/torneios/${tournament.id}/editar`} className="btn btn-outline">
+                Editar
+              </Link>
+              <ShareButton title={tournament.name} path={`/torneios/${tournament.id}`} />
+            </div>
           </div>
           <p className="eyebrow mt-4 text-xs">
             {new Date(tournament.event_date + "T00:00:00").toLocaleDateString("pt-BR")}
