@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DiagonalLines } from "@/components/diagonal-lines";
-import type { Tournament } from "@/lib/types";
+import { getTournamentPhase, type Tournament } from "@/lib/types";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -28,24 +28,27 @@ export default async function AdminPage() {
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-16">
         <ul className="flex flex-col gap-3">
-          {(tournaments ?? []).map((t) => (
-            <li key={t.id}>
-              <Link
-                href={`/admin/torneios/${t.id}`}
-                className="card flex items-center justify-between px-5 py-4 transition-colors hover:bg-surface-hover"
-              >
-                <span>
-                  <span className="block font-display text-lg uppercase tracking-tight">{t.name}</span>
-                  <span className="text-sm text-fg-muted">
-                    {new Date(t.event_date + "T00:00:00").toLocaleDateString("pt-BR")}
+          {(tournaments ?? []).map((t) => {
+            const phase = getTournamentPhase(t);
+            return (
+              <li key={t.id}>
+                <Link
+                  href={`/admin/torneios/${t.id}`}
+                  className="card flex items-center justify-between px-5 py-4 transition-colors hover:bg-surface-hover"
+                >
+                  <span>
+                    <span className="block font-display text-lg uppercase tracking-tight">{t.name}</span>
+                    <span className="text-sm text-fg-muted">
+                      {new Date(t.event_date + "T00:00:00").toLocaleDateString("pt-BR")}
+                    </span>
                   </span>
-                </span>
-                <span className={`badge ${t.status === "open" ? "badge-accent" : ""}`}>
-                  {t.status === "open" ? "aberto" : "encerrado"}
-                </span>
-              </Link>
-            </li>
-          ))}
+                  <span className={`badge ${phase === "open" ? "badge-accent" : ""}`}>
+                    {phase === "open" ? "aberto" : phase === "scheduled" ? "em breve" : "encerrado"}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
           {(tournaments ?? []).length === 0 && (
             <p className="text-sm text-fg-muted">Nenhum torneio cadastrado.</p>
           )}
