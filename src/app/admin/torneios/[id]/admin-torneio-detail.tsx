@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { DiagonalLines } from "@/components/diagonal-lines";
 import { BackLink } from "@/components/back-link";
-import { getTournamentPhase, type Registration, type Tournament, type TournamentCategory } from "@/lib/types";
+import {
+  getTournamentPhase,
+  toDatetimeLocalValue,
+  type Registration,
+  type Tournament,
+  type TournamentCategory,
+} from "@/lib/types";
 
 export function AdminTorneioDetail({
   tournament,
@@ -21,11 +27,31 @@ export function AdminTorneioDetail({
   const phase = getTournamentPhase(tournament);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [scheduledAt, setScheduledAt] = useState("");
-  const [opensAt, setOpensAt] = useState("");
+  const [scheduledAt, setScheduledAt] = useState(() =>
+    toDatetimeLocalValue(tournament.scheduled_close_at)
+  );
+  const [opensAt, setOpensAt] = useState(() =>
+    toDatetimeLocalValue(tournament.registration_opens_at)
+  );
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editP1, setEditP1] = useState("");
   const [editP2, setEditP2] = useState("");
+
+  // mantem os campos de data sincronizados quando o torneio é recarregado
+  // (ex: depois de agendar/abrir/encerrar), sem usar useEffect
+  const [prevScheduledCloseAt, setPrevScheduledCloseAt] = useState(tournament.scheduled_close_at);
+  if (prevScheduledCloseAt !== tournament.scheduled_close_at) {
+    setPrevScheduledCloseAt(tournament.scheduled_close_at);
+    setScheduledAt(toDatetimeLocalValue(tournament.scheduled_close_at));
+  }
+
+  const [prevRegistrationOpensAt, setPrevRegistrationOpensAt] = useState(
+    tournament.registration_opens_at
+  );
+  if (prevRegistrationOpensAt !== tournament.registration_opens_at) {
+    setPrevRegistrationOpensAt(tournament.registration_opens_at);
+    setOpensAt(toDatetimeLocalValue(tournament.registration_opens_at));
+  }
 
   async function closeNow() {
     setLoading(true);
