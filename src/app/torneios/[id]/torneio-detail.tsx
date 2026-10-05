@@ -251,10 +251,21 @@ export function TorneioDetail({
                   )}
                   {confirmed.length > 0 && (
                     <ul>
-                      {confirmed.map((r) => (
+                      {confirmed.map((r, i) => (
                         <li key={r.id} className="info-row">
-                          <span className="text-sm">
-                            {r.player1_name} / {r.player2_name}
+                          <span>
+                            <span className="text-sm">
+                              {r.player1_name} / {r.player2_name}
+                            </span>
+                            <span className="block text-xs text-fg-muted">
+                              #{i + 1} · inscrito em{" "}
+                              {new Date(r.created_at).toLocaleString("pt-BR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
                           </span>
                           <span className="badge badge-accent">confirmada</span>
                         </li>
@@ -263,10 +274,21 @@ export function TorneioDetail({
                   )}
                   {waitlist.length > 0 && (
                     <ul>
-                      {waitlist.map((r) => (
+                      {waitlist.map((r, i) => (
                         <li key={r.id} className="info-row">
-                          <span className="text-sm">
-                            {r.player1_name} / {r.player2_name}
+                          <span>
+                            <span className="text-sm">
+                              {r.player1_name} / {r.player2_name}
+                            </span>
+                            <span className="block text-xs text-fg-muted">
+                              #{confirmed.length + i + 1} · inscrito em{" "}
+                              {new Date(r.created_at).toLocaleString("pt-BR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
                           </span>
                           <span className="badge">lista de espera</span>
                         </li>
