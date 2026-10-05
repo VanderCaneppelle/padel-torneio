@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { DiagonalLines } from "@/components/diagonal-lines";
+import { BackLink } from "@/components/back-link";
 import {
   getTournamentPhase,
   type CategorySlotCount,
@@ -110,7 +111,8 @@ export function TorneioDetail({
       <div className="relative isolate overflow-hidden border-b border-border bg-bg-soft">
         <DiagonalLines className="opacity-50" />
         <div className="relative z-10 mx-auto max-w-3xl px-6 py-12">
-          <p className="eyebrow text-xs">
+          <BackLink href="/torneios" label="Torneios" />
+          <p className="eyebrow mt-4 text-xs">
             {new Date(tournament.event_date + "T00:00:00").toLocaleDateString("pt-BR")}
           </p>
           <h1 className="heading-xl mt-2 text-3xl sm:text-4xl">{tournament.name}</h1>
@@ -128,12 +130,12 @@ export function TorneioDetail({
       </div>
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 pb-16">
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-1">
           <h2 className="heading text-sm text-fg-muted">Categorias</h2>
-          <ul className="grid gap-3 sm:grid-cols-2">
+          <ul>
             {slotCounts.map((c) => (
-              <li key={c.tournament_category_id} className="card flex items-center justify-between px-5 py-3">
-                <span className="font-display text-lg uppercase">{c.category}</span>
+              <li key={c.tournament_category_id} className="info-row">
+                <span className="font-display text-base uppercase text-fg-muted">{c.category}</span>
                 <span className="text-sm text-fg-muted">
                   {c.confirmed_count}/{c.slots_limit} vagas
                   {c.waitlist_count > 0 && ` · ${c.waitlist_count} na espera`}

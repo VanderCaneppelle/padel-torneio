@@ -6,6 +6,8 @@
   --color-surface: #16352c;
   --color-surface-hover: #1d4036;
   --color-border: #2a4a3f;
+  --color-border-strong: #4d7c69;
+  --color-input-bg: #1a3b31;
   --color-accent: #d7f23d;
   --color-accent-hover: #c3dd2f;
   --color-accent-fg: #0e2a23;
@@ -21,6 +23,8 @@
   --color-surface: var(--color-surface);
   --color-surface-hover: var(--color-surface-hover);
   --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-input-bg: var(--color-input-bg);
   --color-accent: var(--color-accent);
   --color-accent-hover: var(--color-accent-hover);
   --color-accent-fg: var(--color-accent-fg);
@@ -79,17 +83,21 @@ body {
   }
 
   .input {
-    background: var(--color-bg-soft);
-    border: 1px solid var(--color-border);
+    background: var(--color-input-bg);
+    border: 1.5px solid var(--color-border-strong);
     border-radius: 0.5rem;
-    padding: 0.6rem 0.85rem;
+    padding: 0.65rem 0.9rem;
     color: var(--color-fg);
     font-size: 0.9rem;
     outline: none;
-    transition: border-color 0.15s ease;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
   .input:focus {
     border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent);
+  }
+  .input:hover:not(:focus) {
+    border-color: color-mix(in srgb, var(--color-border-strong) 70%, var(--color-accent) 30%);
   }
 
   .label {
@@ -168,5 +176,38 @@ body {
     background: color-mix(in srgb, var(--color-accent) 16%, transparent);
     border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
     color: var(--color-accent);
+  }
+
+  /* lista somente informativa: sem borda/raio de card, não deve parecer clicável */
+  .info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .info-row:last-child {
+    border-bottom: none;
+  }
+
+  /* chip selecionável do formulário de categorias */
+  .option-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1.5px solid var(--color-border-strong);
+    background: var(--color-input-bg);
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.9rem;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .option-chip:has(input:checked) {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-input-bg));
+  }
+  .option-chip input[type="checkbox"] {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--color-accent);
   }
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { DiagonalLines } from "@/components/diagonal-lines";
+import { BackLink } from "@/components/back-link";
 import { CATEGORIES, type Category } from "@/lib/types";
 
 export default function NovoTorneioPage() {
@@ -14,25 +15,40 @@ export default function NovoTorneioPage() {
   const [description, setDescription] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [registrationOpensAt, setRegistrationOpensAt] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<Record<Category, boolean>>({
+    "7a": false,
+    "6a": false,
+    "5a": false,
+    "4a": false,
+    "3a": false,
+    "2a": false,
+  });
   const [limits, setLimits] = useState<Record<Category, string>>({
-    "6a": "",
-    "5a": "",
-    "4a": "",
+    "7a": "8",
+    "6a": "8",
+    "5a": "8",
+    "4a": "8",
+    "3a": "8",
+    "2a": "8",
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   function toggleCategory(cat: Category, enabled: boolean) {
-    setLimits((prev) => ({ ...prev, [cat]: enabled ? "8" : "" }));
+    setSelectedCategories((prev) => ({ ...prev, [cat]: enabled }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
 
-    const selected = CATEGORIES.filter((c) => limits[c] !== "");
+    const selected = CATEGORIES.filter((c) => selectedCategories[c]);
     if (selected.length === 0) {
       setError("Selecione ao menos uma categoria.");
+      return;
+    }
+    if (selected.some((c) => !limits[c] || Number(limits[c]) < 1)) {
+      setError("Informe o limite de vagas de cada categoria selecionada.");
       return;
     }
 
@@ -78,8 +94,9 @@ export default function NovoTorneioPage() {
   return (
     <div className="relative isolate flex min-h-[calc(100dvh-69px)] items-start justify-center overflow-hidden px-4 py-16">
       <DiagonalLines className="opacity-40" />
-      <div className="card relative z-10 w-full max-w-sm p-8">
-        <p className="eyebrow text-xs">Painel admin</p>
+      <div className="card relative z-10 w-full max-w-md p-8">
+        <BackLink href="/admin" label="Torneios" />
+        <p className="eyebrow mt-4 text-xs">Painel admin</p>
         <h1 className="heading-xl mt-1 text-3xl">Novo torneio</h1>
         <form onSubmit={handleSubmit} className="mt-7 flex flex-col gap-4">
           <label className="label">
@@ -128,26 +145,23 @@ export default function NovoTorneioPage() {
           <div className="flex flex-col gap-2">
             <span className="label">Categorias e limite de vagas</span>
             {CATEGORIES.map((cat) => (
-              <div key={cat} className="flex items-center gap-3">
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={limits[cat] !== ""}
-                    onChange={(e) => toggleCategory(cat, e.target.checked)}
-                    className="accent-accent"
-                  />
-                  {cat}
-                </label>
-                {limits[cat] !== "" && (
+              <label key={cat} className="option-chip cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedCategories[cat]}
+                  onChange={(e) => toggleCategory(cat, e.target.checked)}
+                />
+                <span className="font-display text-sm uppercase tracking-wide">{cat}</span>
+                {selectedCategories[cat] && (
                   <input
                     type="number"
                     min={1}
                     value={limits[cat]}
                     onChange={(e) => setLimits((prev) => ({ ...prev, [cat]: e.target.value }))}
-                    className="input !w-20 !py-1.5 text-sm"
+                    className="input !ml-auto !w-20 !py-1.5 text-sm"
                   />
                 )}
-              </div>
+              </label>
             ))}
           </div>
 

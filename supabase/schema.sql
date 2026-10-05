@@ -5,6 +5,7 @@
 create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text not null,
+  phone text,
   created_at timestamptz not null default now()
 );
 
@@ -50,8 +51,12 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name)
-  values (new.id, coalesce(new.raw_user_meta_data->>'full_name', new.email));
+  insert into public.profiles (id, full_name, phone)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'full_name', new.email),
+    new.raw_user_meta_data->>'phone'
+  );
   return new;
 end;
 $$;
@@ -91,7 +96,7 @@ create policy "tournaments_delete_admin"
 create table public.tournament_categories (
   id uuid primary key default gen_random_uuid(),
   tournament_id uuid not null references public.tournaments(id) on delete cascade,
-  category text not null check (category in ('6a','5a','4a')),
+  category text not null check (category in ('7a','6a','5a','4a','3a','2a')),
   slots_limit int not null check (slots_limit > 0),
   created_at timestamptz not null default now(),
   unique (tournament_id, category)

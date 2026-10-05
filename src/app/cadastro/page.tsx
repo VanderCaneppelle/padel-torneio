@@ -10,10 +10,11 @@ export default function CadastroPage() {
   const router = useRouter();
   const supabase = createClient();
   const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+  const [step, setStep] = useState<"form" | "needs-confirmation" | "done">("form");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -24,7 +25,7 @@ export default function CadastroPage() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: { data: { full_name: fullName, phone: phone.trim() } },
     });
 
     setLoading(false);
@@ -39,15 +40,15 @@ export default function CadastroPage() {
     }
 
     if (!data.session) {
-      setNeedsEmailConfirmation(true);
+      setStep("needs-confirmation");
       return;
     }
 
-    router.push("/torneios");
+    setStep("done");
     router.refresh();
   }
 
-  if (needsEmailConfirmation) {
+  if (step === "needs-confirmation") {
     return (
       <div className="relative isolate flex min-h-[calc(100dvh-69px)] items-center justify-center overflow-hidden px-4 py-16">
         <DiagonalLines className="opacity-60" />
@@ -60,6 +61,24 @@ export default function CadastroPage() {
           </p>
           <Link href="/login" className="mt-6 inline-block text-sm text-accent hover:underline">
             Ir para o login
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === "done") {
+    return (
+      <div className="relative isolate flex min-h-[calc(100dvh-69px)] items-center justify-center overflow-hidden px-4 py-16">
+        <DiagonalLines className="opacity-60" />
+        <div className="card relative z-10 w-full max-w-sm p-8">
+          <p className="eyebrow text-xs">Tudo certo</p>
+          <h1 className="heading-xl mt-1 text-2xl">Cadastro completo</h1>
+          <p className="mt-4 text-sm text-fg-muted">
+            Sua conta foi criada com sucesso. Você já pode acessar os torneios.
+          </p>
+          <Link href="/torneios" className="btn btn-primary mt-6 inline-flex">
+            Ver torneios
           </Link>
         </div>
       </div>
@@ -79,6 +98,17 @@ export default function CadastroPage() {
               required
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
+              className="input"
+            />
+          </label>
+          <label className="label">
+            WhatsApp
+            <input
+              type="tel"
+              required
+              placeholder="(11) 91234-5678"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="input"
             />
           </label>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { DiagonalLines } from "@/components/diagonal-lines";
+import { BackLink } from "@/components/back-link";
 import { getTournamentPhase, type Registration, type Tournament, type TournamentCategory } from "@/lib/types";
 
 export function AdminTorneioDetail({
@@ -120,7 +121,8 @@ export function AdminTorneioDetail({
       <div className="relative isolate overflow-hidden border-b border-border bg-bg-soft">
         <DiagonalLines className="opacity-50" />
         <div className="relative z-10 mx-auto max-w-3xl px-6 py-12">
-          <p className="eyebrow text-xs">
+          <BackLink href="/admin" label="Torneios" />
+          <p className="eyebrow mt-4 text-xs">
             {new Date(tournament.event_date + "T00:00:00").toLocaleDateString("pt-BR")}
           </p>
           <h1 className="heading-xl mt-2 text-3xl sm:text-4xl">{tournament.name}</h1>

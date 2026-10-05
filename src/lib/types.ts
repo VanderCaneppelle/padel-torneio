@@ -1,4 +1,4 @@
-export type Category = "6a" | "5a" | "4a";
+export type Category = "7a" | "6a" | "5a" | "4a" | "3a" | "2a";
 
 export type Tournament = {
   id: string;
@@ -39,7 +39,7 @@ export type Registration = {
   created_at: string;
 };
 
-export const CATEGORIES: Category[] = ["6a", "5a", "4a"];
+export const CATEGORIES: Category[] = ["7a", "6a", "5a", "4a", "3a", "2a"];
 
 export type TournamentPhase = "scheduled" | "open" | "closed";
 
