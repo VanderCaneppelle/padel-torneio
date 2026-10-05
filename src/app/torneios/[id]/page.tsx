@@ -13,7 +13,7 @@ export default async function TorneioPage({
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  const [{ data: tournament }, { data: slotCounts }, { data: myRegistration }, { data: profile }] =
+  const [{ data: tournament }, { data: slotCounts }, { data: registrations }, { data: profile }] =
     await Promise.all([
       supabase.from("tournaments").select("*").eq("id", id).maybeSingle<Tournament>(),
       supabase
@@ -22,14 +22,12 @@ export default async function TorneioPage({
         .eq("tournament_id", id)
         .order("category", { ascending: false })
         .returns<CategorySlotCount[]>(),
-      user
-        ? supabase
-            .from("registrations")
-            .select("*")
-            .eq("tournament_id", id)
-            .eq("user_id", user.id)
-            .maybeSingle<Registration>()
-        : Promise.resolve({ data: null }),
+      supabase
+        .from("registrations")
+        .select("*")
+        .eq("tournament_id", id)
+        .order("created_at", { ascending: true })
+        .returns<Registration[]>(),
       user
         ? supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle()
         : Promise.resolve({ data: null }),
@@ -37,11 +35,16 @@ export default async function TorneioPage({
 
   if (!tournament) notFound();
 
+  const myRegistration = user
+    ? (registrations ?? []).find((r) => r.user_id === user.id) ?? null
+    : null;
+
   return (
     <TorneioDetail
       tournament={tournament}
       slotCounts={slotCounts ?? []}
-      myRegistration={myRegistration ?? null}
+      registrations={registrations ?? []}
+      myRegistration={myRegistration}
       defaultPlayer1Name={profile?.full_name ?? ""}
     />
   );

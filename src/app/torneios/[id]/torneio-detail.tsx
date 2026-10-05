@@ -15,11 +15,13 @@ import {
 export function TorneioDetail({
   tournament,
   slotCounts,
+  registrations,
   myRegistration,
   defaultPlayer1Name,
 }: {
   tournament: Tournament;
   slotCounts: CategorySlotCount[];
+  registrations: Registration[];
   myRegistration: Registration | null;
   defaultPlayer1Name: string;
 }) {
@@ -224,6 +226,54 @@ export function TorneioDetail({
             </form>
           </section>
         ) : null}
+
+        {slotCounts.length > 0 && (
+          <section className="flex flex-col gap-6">
+            <h2 className="heading text-sm text-fg-muted">Inscritos</h2>
+            {slotCounts.map((c) => {
+              const regs = registrations.filter(
+                (r) => r.tournament_category_id === c.tournament_category_id
+              );
+              const confirmed = regs.filter((r) => r.status === "confirmed");
+              const waitlist = regs.filter((r) => r.status === "waitlist");
+
+              return (
+                <div key={c.tournament_category_id} className="flex flex-col gap-2">
+                  <p className="font-display text-sm uppercase tracking-wide text-accent">
+                    {c.category}
+                  </p>
+                  {confirmed.length === 0 && waitlist.length === 0 && (
+                    <p className="text-sm text-fg-muted">Nenhuma dupla inscrita ainda.</p>
+                  )}
+                  {confirmed.length > 0 && (
+                    <ul>
+                      {confirmed.map((r) => (
+                        <li key={r.id} className="info-row">
+                          <span className="text-sm">
+                            {r.player1_name} / {r.player2_name}
+                          </span>
+                          <span className="badge badge-accent">confirmada</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {waitlist.length > 0 && (
+                    <ul>
+                      {waitlist.map((r) => (
+                        <li key={r.id} className="info-row">
+                          <span className="text-sm">
+                            {r.player1_name} / {r.player2_name}
+                          </span>
+                          <span className="badge">lista de espera</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          </section>
+        )}
       </div>
     </div>
   );

@@ -134,13 +134,14 @@ create index registrations_category_status_idx
 
 alter table public.registrations enable row level security;
 
--- leitura: dono ou admin. Escritas (insert/update/delete) acontecem só via as
--- funções abaixo (security definer), que fazem a lógica de vaga/fila e checam
--- permissão (dono ou admin) internamente. Não há policies de insert/update/delete
--- diretas de propósito.
-create policy "registrations_select_own_or_admin"
+-- leitura: qualquer usuario logado ve a lista de duplas inscritas (como uma
+-- lista de chamada normal de torneio). Escritas (insert/update/delete)
+-- acontecem só via as funções abaixo (security definer), que fazem a lógica
+-- de vaga/fila e checam permissão (dono ou admin) internamente. Não há
+-- policies de insert/update/delete diretas de propósito.
+create policy "registrations_select_authenticated"
   on public.registrations for select
-  using (user_id = auth.uid() or public.is_admin(auth.uid()));
+  using (auth.uid() is not null);
 
 -- inscreve a dupla: confirma se houver vaga, senão entra na lista de espera
 create or replace function public.register_team(

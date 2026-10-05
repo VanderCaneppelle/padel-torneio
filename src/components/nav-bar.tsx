@@ -75,7 +75,7 @@ export function NavBar() {
               pathname?.startsWith("/torneios") ? "text-accent" : ""
             }`}
           >
-            Torneios
+            Área do atleta
           </Link>
           {isAdmin && (
             <Link
@@ -84,7 +84,7 @@ export function NavBar() {
                 pathname?.startsWith("/admin") ? "text-accent" : ""
               }`}
             >
-              Admin
+              Área do admin
             </Link>
           )}
           <span className="hidden text-sm text-fg-muted sm:inline">{email}</span>
