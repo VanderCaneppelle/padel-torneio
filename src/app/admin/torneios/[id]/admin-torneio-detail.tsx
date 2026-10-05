@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { DiagonalLines } from "@/components/diagonal-lines";
 import { BackLink } from "@/components/back-link";
+import { ShareButton } from "@/components/share-button";
 import {
   getTournamentPhase,
   toDatetimeLocalValue,
@@ -165,7 +166,10 @@ export function AdminTorneioDetail({
       <div className="relative isolate overflow-hidden border-b border-border bg-bg-soft">
         <DiagonalLines className="opacity-50" />
         <div className="relative z-10 mx-auto max-w-3xl px-6 py-12">
-          <BackLink href="/admin" label="Torneios" />
+          <div className="flex items-center justify-between">
+            <BackLink href="/admin" label="Torneios" />
+            <ShareButton title={tournament.name} path={`/torneios/${tournament.id}`} />
+          </div>
           <p className="eyebrow mt-4 text-xs">
             {new Date(tournament.event_date + "T00:00:00").toLocaleDateString("pt-BR")}
           </p>
