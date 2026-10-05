@@ -20,8 +20,17 @@ const archivo = Archivo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://quoracup.vercel.app"),
   title: "QuoraCup Padel",
   description: "Inscrições para os torneios semanais de padel",
+  openGraph: {
+    title: "QuoraCup Padel",
+    description: "Inscrições para os torneios semanais de padel",
+    url: "https://quoracup.vercel.app",
+    siteName: "QuoraCup Padel",
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

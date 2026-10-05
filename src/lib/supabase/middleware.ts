@@ -33,6 +33,7 @@ export async function updateSession(request: NextRequest) {
     path === "/favicon.ico" ||
     path === "/icon" ||
     path === "/apple-icon" ||
+    path === "/opengraph-image" ||
     path.startsWith("/_next") ||
     path.startsWith("/api");
 
