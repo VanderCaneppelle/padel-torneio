@@ -27,6 +27,7 @@ export async function updateSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
   const isPublic =
+    path === "/" ||
     path === "/login" ||
     path === "/cadastro" ||
     path === "/favicon.ico" ||
@@ -41,7 +42,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && (path === "/login" || path === "/cadastro")) {
+  if (user && (path === "/" || path === "/login" || path === "/cadastro")) {
     const url = request.nextUrl.clone();
     url.pathname = "/torneios";
     return NextResponse.redirect(url);

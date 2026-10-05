@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { DiagonalLines } from "@/components/diagonal-lines";
+import { formatPhoneBR } from "@/lib/format";
 
 export default function CadastroPage() {
   const router = useRouter();
@@ -106,9 +107,11 @@ export default function CadastroPage() {
             <input
               type="tel"
               required
+              inputMode="numeric"
               placeholder="(11) 91234-5678"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(formatPhoneBR(e.target.value))}
+              maxLength={15}
               className="input"
             />
           </label>

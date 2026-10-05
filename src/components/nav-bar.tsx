@@ -44,9 +44,19 @@ export function NavBar() {
     return (
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/torneios">
+          <Link href="/">
             <Logo />
           </Link>
+          {pathname !== "/login" && pathname !== "/cadastro" && (
+            <nav className="flex items-center gap-3">
+              <Link href="/login" className="btn btn-outline !px-4 !py-1.5 text-xs">
+                Entrar
+              </Link>
+              <Link href="/cadastro" className="btn btn-primary !px-4 !py-1.5 text-xs">
+                Criar conta
+              </Link>
+            </nav>
+          )}
         </div>
       </header>
     );
