@@ -58,6 +58,9 @@ export default function LoginPage() {
               className="input"
             />
           </label>
+          <Link href="/esqueci-senha" className="-mt-2 self-end text-xs text-fg-muted hover:text-accent">
+            Esqueci minha senha
+          </Link>
           {error && <p className="text-sm text-danger">{error}</p>}
           <button type="submit" disabled={loading} className="btn btn-primary mt-2">
             {loading ? "Entrando..." : "Entrar"}

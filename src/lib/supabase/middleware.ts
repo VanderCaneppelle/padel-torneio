@@ -30,6 +30,8 @@ export async function updateSession(request: NextRequest) {
     path === "/" ||
     path === "/login" ||
     path === "/cadastro" ||
+    path === "/esqueci-senha" ||
+    path === "/redefinir-senha" ||
     path === "/favicon.ico" ||
     path === "/icon" ||
     path === "/apple-icon" ||
