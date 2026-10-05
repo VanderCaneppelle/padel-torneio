@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { DiagonalLines } from "@/components/diagonal-lines";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,44 +32,44 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto flex max-w-sm flex-col gap-6 px-4 py-16">
-      <h1 className="text-2xl font-semibold">Entrar</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1 text-sm">
-          Email
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="rounded border border-black/15 px-3 py-2 dark:border-white/20"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Senha
-          <input
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="rounded border border-black/15 px-3 py-2 dark:border-white/20"
-          />
-        </label>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
-        >
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
-      <p className="text-sm">
-        Ainda não tem conta?{" "}
-        <Link href="/cadastro" className="underline">
-          Cadastre-se
-        </Link>
-      </p>
+    <div className="relative isolate flex min-h-[calc(100dvh-69px)] items-center justify-center overflow-hidden px-4 py-16">
+      <DiagonalLines className="opacity-60" />
+      <div className="card relative z-10 w-full max-w-sm p-8">
+        <p className="eyebrow text-xs">Bem-vindo de volta</p>
+        <h1 className="heading-xl mt-1 text-3xl">Entrar</h1>
+        <form onSubmit={handleSubmit} className="mt-7 flex flex-col gap-4">
+          <label className="label">
+            Email
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input"
+            />
+          </label>
+          <label className="label">
+            Senha
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input"
+            />
+          </label>
+          {error && <p className="text-sm text-danger">{error}</p>}
+          <button type="submit" disabled={loading} className="btn btn-primary mt-2">
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+        </form>
+        <p className="mt-6 text-sm text-fg-muted">
+          Ainda não tem conta?{" "}
+          <Link href="/cadastro" className="text-accent hover:underline">
+            Cadastre-se
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

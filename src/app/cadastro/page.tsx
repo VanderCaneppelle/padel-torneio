@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { DiagonalLines } from "@/components/diagonal-lines";
 
 export default function CadastroPage() {
   const router = useRouter();
@@ -48,68 +49,72 @@ export default function CadastroPage() {
 
   if (needsEmailConfirmation) {
     return (
-      <div className="mx-auto flex max-w-sm flex-col gap-4 px-4 py-16">
-        <h1 className="text-2xl font-semibold">Confirme seu email</h1>
-        <p className="text-sm">
-          Enviamos um link de confirmação para <strong>{email}</strong>. Abra
-          o email e confirme para poder entrar.
-        </p>
-        <Link href="/login" className="underline text-sm">
-          Ir para o login
-        </Link>
+      <div className="relative isolate flex min-h-[calc(100dvh-69px)] items-center justify-center overflow-hidden px-4 py-16">
+        <DiagonalLines className="opacity-60" />
+        <div className="card relative z-10 w-full max-w-sm p-8">
+          <p className="eyebrow text-xs">Quase lá</p>
+          <h1 className="heading-xl mt-1 text-2xl">Confirme seu email</h1>
+          <p className="mt-4 text-sm text-fg-muted">
+            Enviamos um link de confirmação para <strong className="text-fg">{email}</strong>.
+            Abra o email e confirme para poder entrar.
+          </p>
+          <Link href="/login" className="mt-6 inline-block text-sm text-accent hover:underline">
+            Ir para o login
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto flex max-w-sm flex-col gap-6 px-4 py-16">
-      <h1 className="text-2xl font-semibold">Criar conta</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1 text-sm">
-          Nome completo
-          <input
-            required
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="rounded border border-black/15 px-3 py-2 dark:border-white/20"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Email
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="rounded border border-black/15 px-3 py-2 dark:border-white/20"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Senha
-          <input
-            type="password"
-            required
-            minLength={6}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="rounded border border-black/15 px-3 py-2 dark:border-white/20"
-          />
-        </label>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
-        >
-          {loading ? "Criando..." : "Criar conta"}
-        </button>
-      </form>
-      <p className="text-sm">
-        Já tem conta?{" "}
-        <Link href="/login" className="underline">
-          Entrar
-        </Link>
-      </p>
+    <div className="relative isolate flex min-h-[calc(100dvh-69px)] items-center justify-center overflow-hidden px-4 py-16">
+      <DiagonalLines className="opacity-60" />
+      <div className="card relative z-10 w-full max-w-sm p-8">
+        <p className="eyebrow text-xs">Primeira vez por aqui</p>
+        <h1 className="heading-xl mt-1 text-3xl">Criar conta</h1>
+        <form onSubmit={handleSubmit} className="mt-7 flex flex-col gap-4">
+          <label className="label">
+            Nome completo
+            <input
+              required
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="input"
+            />
+          </label>
+          <label className="label">
+            Email
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input"
+            />
+          </label>
+          <label className="label">
+            Senha
+            <input
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input"
+            />
+          </label>
+          {error && <p className="text-sm text-danger">{error}</p>}
+          <button type="submit" disabled={loading} className="btn btn-primary mt-2">
+            {loading ? "Criando..." : "Criar conta"}
+          </button>
+        </form>
+        <p className="mt-6 text-sm text-fg-muted">
+          Já tem conta?{" "}
+          <Link href="/login" className="text-accent hover:underline">
+            Entrar
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

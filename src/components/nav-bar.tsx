@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Logo } from "@/components/logo";
 
 export function NavBar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [email, setEmail] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const supabase = createClient();
@@ -38,22 +40,48 @@ export function NavBar() {
     router.refresh();
   }
 
+  if (!email) {
+    return (
+      <header className="border-b border-border">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+          <Link href="/torneios">
+            <Logo />
+          </Link>
+        </div>
+      </header>
+    );
+  }
+
   return (
-    <header className="border-b border-black/10 dark:border-white/15">
-      <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-        <Link href="/torneios" className="font-semibold">
-          QuoraCup Padel
+    <header className="border-b border-border bg-bg-soft">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+        <Link href="/torneios">
+          <Logo />
         </Link>
-        {email && (
-          <nav className="flex items-center gap-4 text-sm">
-            <Link href="/torneios">Torneios</Link>
-            {isAdmin && <Link href="/admin">Admin</Link>}
-            <span className="text-black/50 dark:text-white/50">{email}</span>
-            <button onClick={handleLogout} className="underline">
-              Sair
-            </button>
-          </nav>
-        )}
+        <nav className="flex items-center gap-6">
+          <Link
+            href="/torneios"
+            className={`eyebrow text-xs transition-colors hover:text-fg ${
+              pathname?.startsWith("/torneios") ? "text-accent" : ""
+            }`}
+          >
+            Torneios
+          </Link>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={`eyebrow text-xs transition-colors hover:text-fg ${
+                pathname?.startsWith("/admin") ? "text-accent" : ""
+              }`}
+            >
+              Admin
+            </Link>
+          )}
+          <span className="hidden text-sm text-fg-muted sm:inline">{email}</span>
+          <button onClick={handleLogout} className="btn btn-outline !px-3 !py-1.5 text-xs">
+            Sair
+          </button>
+        </nav>
       </div>
     </header>
   );

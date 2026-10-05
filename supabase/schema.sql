@@ -64,8 +64,10 @@ create trigger on_auth_user_created
 create table public.tournaments (
   id uuid primary key default gen_random_uuid(),
   name text not null,
+  description text,
   event_date date not null,
   status text not null default 'open' check (status in ('open','closed')),
+  registration_opens_at timestamptz,
   scheduled_close_at timestamptz,
   created_by uuid references auth.users(id),
   created_at timestamptz not null default now()
@@ -167,6 +169,10 @@ begin
   if v_tournament.status = 'closed'
      or (v_tournament.scheduled_close_at is not null and v_tournament.scheduled_close_at <= now()) then
     raise exception 'registrations are closed for this tournament';
+  end if;
+
+  if v_tournament.registration_opens_at is not null and v_tournament.registration_opens_at > now() then
+    raise exception 'registrations have not opened yet for this tournament';
   end if;
 
   if p_player1_name is null or trim(p_player1_name) = ''

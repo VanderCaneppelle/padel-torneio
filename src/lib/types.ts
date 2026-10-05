@@ -3,8 +3,10 @@ export type Category = "6a" | "5a" | "4a";
 export type Tournament = {
   id: string;
   name: string;
+  description: string | null;
   event_date: string;
   status: "open" | "closed";
+  registration_opens_at: string | null;
   scheduled_close_at: string | null;
   created_at: string;
 };
@@ -39,8 +41,15 @@ export type Registration = {
 
 export const CATEGORIES: Category[] = ["6a", "5a", "4a"];
 
+export type TournamentPhase = "scheduled" | "open" | "closed";
+
+export function getTournamentPhase(t: Tournament): TournamentPhase {
+  if (t.status === "closed") return "closed";
+  if (t.scheduled_close_at && new Date(t.scheduled_close_at) <= new Date()) return "closed";
+  if (t.registration_opens_at && new Date(t.registration_opens_at) > new Date()) return "scheduled";
+  return "open";
+}
+
 export function isTournamentOpen(t: Tournament): boolean {
-  if (t.status === "closed") return false;
-  if (t.scheduled_close_at && new Date(t.scheduled_close_at) <= new Date()) return false;
-  return true;
+  return getTournamentPhase(t) === "open";
 }
