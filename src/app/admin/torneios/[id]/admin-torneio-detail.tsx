@@ -142,6 +142,24 @@ export function AdminTorneioDetail({
     router.refresh();
   }
 
+  async function deleteTournament() {
+    if (
+      !confirm(
+        `Excluir "${tournament.name}" permanentemente? Isso apaga as categorias e TODAS as inscrições desse torneio. Não dá pra desfazer.`
+      )
+    )
+      return;
+    setLoading(true);
+    const { error } = await supabase.from("tournaments").delete().eq("id", tournament.id);
+    setLoading(false);
+    if (error) {
+      setError("Não foi possível excluir o torneio.");
+      return;
+    }
+    router.push("/admin");
+    router.refresh();
+  }
+
   return (
     <div className="flex flex-col gap-10">
       <div className="relative isolate overflow-hidden border-b border-border bg-bg-soft">
@@ -293,6 +311,16 @@ export function AdminTorneioDetail({
             </section>
           );
         })}
+
+        <section className="card flex flex-col gap-3 border-danger/40 p-6">
+          <h2 className="heading text-sm text-danger">Zona de perigo</h2>
+          <p className="text-sm text-fg-muted">
+            Exclui o torneio, as categorias e todas as inscrições. Não dá pra desfazer.
+          </p>
+          <button onClick={deleteTournament} disabled={loading} className="btn btn-danger self-start">
+            Excluir torneio
+          </button>
+        </section>
       </div>
     </div>
   );
