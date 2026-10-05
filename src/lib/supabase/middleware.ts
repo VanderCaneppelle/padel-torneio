@@ -29,6 +29,9 @@ export async function updateSession(request: NextRequest) {
   const isPublic =
     path === "/login" ||
     path === "/cadastro" ||
+    path === "/favicon.ico" ||
+    path === "/icon" ||
+    path === "/apple-icon" ||
     path.startsWith("/_next") ||
     path.startsWith("/api");
 
