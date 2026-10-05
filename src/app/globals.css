@@ -33,6 +33,11 @@
   --font-display: var(--font-archivo);
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-fg);

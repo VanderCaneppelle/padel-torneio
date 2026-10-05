@@ -43,7 +43,7 @@ export function NavBar() {
   if (!email) {
     return (
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Link href="/torneios">
             <Logo />
           </Link>
@@ -54,7 +54,7 @@ export function NavBar() {
 
   return (
     <header className="border-b border-border bg-bg-soft">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <Link href="/torneios">
           <Logo />
         </Link>

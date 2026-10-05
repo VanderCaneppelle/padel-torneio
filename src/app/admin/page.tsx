@@ -15,10 +15,10 @@ export default async function AdminPage() {
     <div className="flex flex-col gap-10">
       <div className="relative isolate overflow-hidden border-b border-border bg-bg-soft">
         <DiagonalLines className="opacity-50" />
-        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-5 py-12">
+        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-6 py-12">
           <div>
             <p className="eyebrow text-xs">Painel admin</p>
-            <h1 className="heading-xl mt-2 text-4xl">Torneios</h1>
+            <h1 className="heading-xl mt-2 text-3xl sm:text-4xl">Torneios</h1>
           </div>
           <Link href="/admin/torneios/novo" className="btn btn-primary">
             Novo torneio
@@ -26,7 +26,7 @@ export default async function AdminPage() {
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-5xl px-5 pb-16">
+      <div className="mx-auto w-full max-w-5xl px-6 pb-16">
         <ul className="flex flex-col gap-3">
           {(tournaments ?? []).map((t) => (
             <li key={t.id}>

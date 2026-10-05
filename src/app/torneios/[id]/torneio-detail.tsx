@@ -109,11 +109,11 @@ export function TorneioDetail({
     <div className="flex flex-col gap-10">
       <div className="relative isolate overflow-hidden border-b border-border bg-bg-soft">
         <DiagonalLines className="opacity-50" />
-        <div className="relative z-10 mx-auto max-w-3xl px-5 py-12">
+        <div className="relative z-10 mx-auto max-w-3xl px-6 py-12">
           <p className="eyebrow text-xs">
             {new Date(tournament.event_date + "T00:00:00").toLocaleDateString("pt-BR")}
           </p>
-          <h1 className="heading-xl mt-2 text-4xl">{tournament.name}</h1>
+          <h1 className="heading-xl mt-2 text-3xl sm:text-4xl">{tournament.name}</h1>
           <span className={`badge mt-3 ${open ? "badge-accent" : ""}`}>
             {phase === "open"
               ? "inscrições abertas"
@@ -127,7 +127,7 @@ export function TorneioDetail({
         </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 pb-16">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 pb-16">
         <section className="flex flex-col gap-3">
           <h2 className="heading text-sm text-fg-muted">Categorias</h2>
           <ul className="grid gap-3 sm:grid-cols-2">
