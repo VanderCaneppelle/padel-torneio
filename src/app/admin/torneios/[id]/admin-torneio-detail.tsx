@@ -37,17 +37,6 @@ export function AdminTorneioDetail({
     else router.refresh();
   }
 
-  async function reopen() {
-    setLoading(true);
-    const { error } = await supabase
-      .from("tournaments")
-      .update({ status: "open", scheduled_close_at: null })
-      .eq("id", tournament.id);
-    setLoading(false);
-    if (error) setError("Não foi possível reabrir o torneio.");
-    else router.refresh();
-  }
-
   async function scheduleClose() {
     if (!scheduledAt) return;
     setLoading(true);
@@ -78,7 +67,7 @@ export function AdminTorneioDetail({
     const iso = new Date(opensAt).toISOString();
     const { error } = await supabase
       .from("tournaments")
-      .update({ registration_opens_at: iso })
+      .update({ status: "open", registration_opens_at: iso })
       .eq("id", tournament.id);
     setLoading(false);
     if (error) setError("Não foi possível agendar a abertura.");
@@ -89,7 +78,7 @@ export function AdminTorneioDetail({
     setLoading(true);
     const { error } = await supabase
       .from("tournaments")
-      .update({ registration_opens_at: null })
+      .update({ status: "open", registration_opens_at: null })
       .eq("id", tournament.id);
     setLoading(false);
     if (error) setError("Não foi possível abrir as inscrições agora.");
@@ -159,60 +148,64 @@ export function AdminTorneioDetail({
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 pb-16">
         {error && <p className="text-sm text-danger">{error}</p>}
 
-        <section className="card flex flex-col gap-4 p-6">
-          <h2 className="heading text-sm text-fg-muted">Abertura das inscrições</h2>
-          <div className="flex flex-wrap items-center gap-2">
-            <input
-              type="datetime-local"
-              value={opensAt}
-              onChange={(e) => setOpensAt(e.target.value)}
-              className="input !py-1.5 text-sm"
-            />
-            <button onClick={scheduleOpen} disabled={loading || !opensAt} className="btn btn-outline">
-              Agendar abertura
-            </button>
-            {tournament.registration_opens_at && (
-              <button onClick={openNow} disabled={loading} className="btn btn-outline">
-                Abrir agora
-              </button>
-            )}
-          </div>
-        </section>
-
-        <section className="card flex flex-col gap-4 p-6">
+        <section className="card flex flex-col gap-5 p-6">
           <h2 className="heading text-sm text-fg-muted">Controle de inscrições</h2>
-          <div className="flex flex-wrap items-center gap-2">
-            {phase === "open" ? (
-              <button onClick={closeNow} disabled={loading} className="btn btn-danger">
-                Encerrar agora
-              </button>
-            ) : (
-              <button onClick={reopen} disabled={loading} className="btn btn-outline">
-                Reabrir inscrições
-              </button>
-            )}
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <input
-              type="datetime-local"
-              value={scheduledAt}
-              onChange={(e) => setScheduledAt(e.target.value)}
-              className="input !py-1.5 text-sm"
-            />
-            <button
-              onClick={scheduleClose}
-              disabled={loading || !scheduledAt}
-              className="btn btn-outline"
-            >
-              Agendar encerramento
-            </button>
-            {tournament.scheduled_close_at && (
-              <button onClick={removeSchedule} disabled={loading} className="btn btn-outline">
-                Remover agendamento
-              </button>
-            )}
-          </div>
+          {phase !== "open" && (
+            <div className="flex flex-col gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
+                Abertura
+              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <input
+                  type="datetime-local"
+                  value={opensAt}
+                  onChange={(e) => setOpensAt(e.target.value)}
+                  className="input !py-1.5 text-sm"
+                />
+                <button onClick={scheduleOpen} disabled={loading || !opensAt} className="btn btn-outline">
+                  Agendar abertura
+                </button>
+                <button onClick={openNow} disabled={loading} className="btn btn-outline">
+                  Abrir agora
+                </button>
+              </div>
+            </div>
+          )}
+
+          {phase !== "closed" && (
+            <div className="flex flex-col gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
+                Encerramento
+              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <button onClick={closeNow} disabled={loading} className="btn btn-danger">
+                  Encerrar agora
+                </button>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <input
+                  type="datetime-local"
+                  value={scheduledAt}
+                  onChange={(e) => setScheduledAt(e.target.value)}
+                  className="input !py-1.5 text-sm"
+                />
+                <button
+                  onClick={scheduleClose}
+                  disabled={loading || !scheduledAt}
+                  className="btn btn-outline"
+                >
+                  Agendar encerramento
+                </button>
+                {tournament.scheduled_close_at && (
+                  <button onClick={removeSchedule} disabled={loading} className="btn btn-outline">
+                    Remover agendamento
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
         </section>
 
         {categories.map((cat) => {
